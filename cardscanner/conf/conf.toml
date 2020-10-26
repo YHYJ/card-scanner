@@ -1,0 +1,43 @@
+[device]
+    keyword = 'usb'                 # 设备类型('usb', 'ALSA')，区分大小写
+
+[interval]
+    heartbeat = 10                  # 心跳间隔
+
+[url]
+    url = '127.0.0.1:80'            # 接收卡号等信息并处理的服务地址(ip:port)
+    getip_ip = '8.8.8.8'            # 该IP地址用于确定刷卡程序所在机器自身的IP信息，只要值不是'127.0.0.1'且符合格式即可
+    getip_port = 80                 # 同getip_ip，只是是端口，任意端口都可以
+
+[log]
+    version = 1
+    disable_existing_loggers = false
+    [log.formatters]
+        [log.formatters.standard]
+            format = '%(asctime)s>%(levelname)s:%(name)s:(%(filename)s:%(lineno)d): %(message)s'
+            datefmt = '%Y-%m-%d %H:%M:%S'
+    [log.handlers]
+        [log.handlers.console]                              # console
+            level = 'INFO'                                  # INFO
+            formatter = 'standard'
+            class = 'logging.StreamHandler'
+        [log.handlers.rotate_debug]                         # rotate_debug
+            level = 'DEBUG'                                 # DEBUG
+            formatter = 'standard'
+            class = 'logging.handlers.RotatingFileHandler'
+            filename = 'logs/debug.log'
+            encoding = 'utf8'
+            maxBytes = 1024000
+            backupCount = 6
+        [log.handlers.rotate_warn]                          # rotate_warn
+            level = 'WARNING'                               # WARNING
+            formatter = 'standard'
+            class = 'logging.handlers.RotatingFileHandler'
+            filename = 'logs/warning.log'
+            encoding = 'utf8'
+            maxBytes = 102400
+            backupCount = 6
+    [log.loggers]
+        [log.loggers.main]
+            handlers = ['console', 'rotate_debug', 'rotate_warn']       # log处理器，从console、rotate_debug、rotate_warn中选取，也可以自定义
+            level = 'DEBUG'                                             # log等级（从低到高）：DEBUG, INFO, WARN/WARNING, ERROR, CRITICAL/FATAL
